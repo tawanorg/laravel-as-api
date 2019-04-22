@@ -3,18 +3,19 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectItem } from './selectors';
+import { makeSelectIsRegistering, makeSelectIsRegistered, makeSelectIsRegisterFailed } from './selectors';
 import CenterContent from './CenterContent';
 import { userRegisterRequest } from './actions';
+import RegisterForm from '../../components/RegisterForm';
 
 class RegisterPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      name: 'tawan chotikanchinda',
+      email: 'ttawanc@gmail.com',
+      password: 'root1234',
+      password_confirmation: 'root1234',
     }
 
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -22,11 +23,7 @@ class RegisterPage extends Component {
   }
 
   handleOnChange(field, value) {
-    if (typeof field !== 'string') {
-      throw new Error('Field key is must be string');
-    }
-
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return Object.assign({}, prevState, {
         [field]: value,
       })
@@ -34,83 +31,45 @@ class RegisterPage extends Component {
   }
 
   handleOnSubmit() {
-    console.log('handleOnSubmit', this.state);
     this.props.register(this.state);
   }
 
   render() {
-    console.log('this.state', this.state)
+    console.log('Register', this.props);
+    const { isRegisterd, isRegistering } = this.props;
+    const isInputDisabled = isRegistering;
+
+    if (isRegisterd) {
+      return (
+        <CenterContent>
+          <div>
+            <div className="text-center mb-4">
+              <h1 className="h3 mb-3 font-weight-normal">Thank you and welcome!</h1>
+              <p className="my-3">We are redirecting you to our system. Please wait...</p>
+            </div>
+          </div>
+        </CenterContent>
+      )
+    }
+
     return (
       <CenterContent>
-        <div>
-          <div className="text-center mb-4">
-            <h1 className="h3 mb-3 font-weight-normal">Become a member!</h1>
-          </div>
-          <div className="form-label-group">
-            <input
-              type="text"
-              id="inputName"
-              className="form-control"
-              placeholder="Your name"
-              onChange={(event) => this.handleOnChange('name', event.target.value)}
-              value={this.state.name}
-            />
-            <label htmlFor="inputName">Your name</label>
-          </div>
-          <div className="form-label-group">
-            <input
-              type="email"
-              id="inputEmail"
-              className="form-control"
-              placeholder="Email address"
-              onChange={(event) => this.handleOnChange('email', event.target.value)}
-              value={this.state.email}
-            />
-            <label htmlFor="inputEmail">Email address</label>
-          </div>
-          <div className="form-label-group">
-            <input
-              type="password"
-              id="inputPassword"
-              className="form-control"
-              placeholder="Password"
-              onChange={(event) => this.handleOnChange('password', event.target.value)}
-              value={this.state.password}
-             />
-            <label htmlFor="inputPassword">Password</label>
-          </div>
-          <div className="form-label-group">
-            <input
-              type="password"
-              id="inputPasswordConfirm"
-              className="form-control"
-              placeholder="Confirm your password"
-              onChange={(event) => this.handleOnChange('confirmPassword', event.target.value)}
-              value={this.state.confirmPassword}
-            />
-            <label htmlFor="inputPasswordConfirm">Confirm Password</label>
-          </div>
-          <button
-            className="btn btn-lg btn-primary btn-block mt-3"
-            type="button"
-            onClick={this.handleOnSubmit}
-          >
-            Register
-          </button>
-        </div>
-        <Link
-          to="/user/login"
-          className="btn btn-lg btn-dark btn-block mt-3"
-        >
-          Already a member?
-        </Link>
+        <RegisterForm
+          value={this.state}
+          onChange={this.handleOnChange}
+          onSubmit={this.handleOnSubmit}
+          isInputDisabled={isInputDisabled}
+          isLoading={isInputDisabled}
+        />
       </CenterContent>
     )
   }
 }
 
 const mapStateToProps = () => createStructuredSelector({
-  item: makeSelectItem(),
+  isRegistering: makeSelectIsRegistering(),
+  isRegisterd: makeSelectIsRegistered(),
+  isRegisterFailed: makeSelectIsRegisterFailed(),
 });
 
 export function mapDispatchToProps(dispatch) {

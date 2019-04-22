@@ -1,13 +1,46 @@
+import axios from 'axios';
 import { all, call, put, takeLatest, delay } from 'redux-saga/effects';
 import {
   USER_REGISTER_REQUEST,
-  USER_REGISTER_SUCCESS,
-  USER_REGISTER_FAILED,
 } from './constants';
+import { USER_API_REGISTER_ENDPOINT } from '../../api';
+import { userRegisterFailed, userRegisterSuccess } from './actions';
 
+function User({ email, name, password, password_confirmation }) {
+  return {
+    email,
+    name,
+    password,
+    password_confirmation,
+  }
+}
 
-function* userRegister() {
+function userRegisterApi(user) {
+  return new Promise((resolve, reject) => {
+    axios.post(USER_API_REGISTER_ENDPOINT, user)
+    .then(response => {
+      if (!response.data.hasOwnProperty('user')) {
+        reject(new Error(JSON.stringify(response.data)));
+      }
 
+      resolve(response.data);
+    })
+    .catch(error => reject(error));
+  })
+}
+
+function* userRegister({ payload }) {
+  try {
+    const { name, email, password, password_confirmation } = payload;
+    const userItem = new User({ name, email, password, password_confirmation })
+    const user = yield call(userRegisterApi, userItem)
+    yield put(userRegisterSuccess(user));
+    localStorage.setItem('user', JSON.stringify(user));
+    console.log('userRegister', user)
+  } catch (error) {
+    localStorage.removeItem('user');
+    yield put(userRegisterFailed(error))
+  }
 }
 
 /**

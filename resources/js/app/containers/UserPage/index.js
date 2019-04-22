@@ -2,7 +2,7 @@ import React, { Component, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectItem } from './selectors';
+import { makeSelectUserItem } from './selectors';
 
 class UserPage extends Component {
   render() {
@@ -15,7 +15,7 @@ class UserPage extends Component {
 }
 
 const mapStateToProps = () => createStructuredSelector({
-  item: makeSelectItem(),
+  user: makeSelectUserItem(),
 });
 
 export function mapDispatchToProps(dispatch) {

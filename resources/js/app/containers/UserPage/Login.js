@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectItem } from './selectors';
+import { makeSelectUserItem } from './selectors';
 import CenterContent from './CenterContent';
 
 class LoginPage extends Component {
@@ -41,7 +41,7 @@ class LoginPage extends Component {
 }
 
 const mapStateToProps = () => createStructuredSelector({
-  item: makeSelectItem(),
+  user: makeSelectUserItem(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -51,7 +51,7 @@ export function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-  mapStateToProps,
+  // mapStateToProps,
   mapDispatchToProps,
 );
 

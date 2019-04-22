@@ -7,6 +7,7 @@ import {
 export const initialState = {
   isRegisterLoading: false,
   isRegistered: false,
+  isRegisterFailed: null,
   user: null,
 }
 
@@ -26,7 +27,7 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {
         isRegisterLoading: false,
         isRegistered: false,
-        isRegisterError: action.payload,
+        isRegisterFailed: action.payload,
         user: null,
       });
     default:

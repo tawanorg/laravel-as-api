@@ -5,6 +5,10 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectUserItem } from './selectors';
 
 import WelcomeBox from '../../components/WelcomeBox';
+import Film from '../../components/Film';
+import UserCommentBox from '../../components/UserCommentBox';
+import CommentBox from '../../components/CommentBox';
+import Pagination from '../../components/Pagination';
 import { userAuth } from '../UserPage/actions';
 
 class HomePage extends Component {
@@ -19,6 +23,26 @@ class HomePage extends Component {
         <div className="row">
           <div className="col-12">
             {this.renderWelcomeBox()}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <Pagination />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <Film />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <UserCommentBox />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <CommentBox />
           </div>
         </div>
       </div>

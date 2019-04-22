@@ -4,13 +4,19 @@ import {
   USER_REGISTER_REQUEST,
   USER_AUTH,
   USER_DESTROY,
+  USER_LOGIN_REQUEST,
 } from './constants';
-import { USER_API_REGISTER_ENDPOINT } from '../../api';
+import {
+  USER_API_REGISTER_ENDPOINT,
+  USER_API_LOGIN_ENDPOINT,
+} from '../../api';
 import {
   userLoggedIn,
   userRegisterFailed,
   userRegisterSuccess,
   userLoggedOut,
+  userLoginSuccess,
+  userLoginFailed,
 } from './actions';
 
 function User({ email, name, password, password_confirmation }) {
@@ -36,16 +42,46 @@ function userRegisterApi(user) {
   })
 }
 
+function userLoginApi(user) {
+  return new Promise((resolve, reject) => {
+    axios.post(USER_API_LOGIN_ENDPOINT, user)
+    .then(response => {
+      if (!response.data.hasOwnProperty('user')) {
+        reject(new Error(JSON.stringify(response.data)));
+      }
+
+      resolve(response.data);
+    })
+    .catch(error => {
+      reject(error)
+    });
+  })
+}
+
 function* userRegister({ payload }) {
   try {
     const { name, email, password, password_confirmation } = payload;
     const userItem = new User({ name, email, password, password_confirmation })
-    const user = yield call(userRegisterApi, userItem)
-    yield put(userRegisterSuccess(user));
-    localStorage.setItem('user', JSON.stringify(user));
+    const userObj = yield call(userRegisterApi, userItem)
+    yield put(userRegisterSuccess(userObj));
+    localStorage.setItem('user', JSON.stringify(userObj));
   } catch (error) {
     localStorage.removeItem('user');
     yield put(userRegisterFailed(error))
+  }
+}
+
+function* userLogin({ payload }) {
+  try {
+    const { email, password } = payload;
+    const userItem = { email, password }
+    const userObj = yield call(userLoginApi, userItem)
+    yield put(userLoginSuccess(userObj));
+    localStorage.setItem('user', JSON.stringify(userObj));
+  } catch (error) {
+    console.log('error', error);
+    localStorage.removeItem('user');
+    yield put(userLoginFailed(error))
   }
 }
 
@@ -63,6 +99,10 @@ function* destroy() {
 /**
  * Watchers
  */
+function* watchUserLoggingin() {
+  yield takeLatest(USER_LOGIN_REQUEST, userLogin);
+}
+
 function* watchUserRegistering() {
   yield takeLatest(USER_REGISTER_REQUEST, userRegister);
 }
@@ -78,6 +118,7 @@ function* watchUserDestroy() {
 export default function* root() {
   yield all([
     watchUserRegistering(),
+    watchUserLoggingin(),
     watchUserAuth(),
     watchUserDestroy(),
   ])

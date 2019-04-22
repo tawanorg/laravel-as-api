@@ -1,39 +1,176 @@
 import React, { Component, memo } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectUserItem } from './selectors';
+import {
+  makeSelectUserItem,
+  makeSelectIsLogingIn,
+  makeSelectIsLoggedIn,
+  makeSelectIsLogInFailed,
+} from './selectors';
 import CenterContent from './CenterContent';
+import { userLoginRequest } from './actions';
+import LoginForm from '../../components/LoginForm';
+import { getErrorMessageFromApi } from '../../utils';
 
 class LoginPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fields: {
+        email: 'ttawanc@gmail.com',
+        password: 'root1234',
+      },
+      errors: {},
+      isLoggedIn: false,
+    }
+    this.timer = null;
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.renderErrorMessages = this.renderErrorMessages.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.isLoggedIn || nextProps.currentUser) {
+      return {
+        isLoggedIn: true,
+      }
+    }
+
+    return {
+      isLoggedIn: false,
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.isLoggedIn) {
+      this.timer = setTimeout(() => {
+        this.props.history.push('/');
+      }, 3000);
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  handleOnChange(field, value) {
+    this.setState((prevState) => {
+      return {
+        fields: Object.assign({}, prevState.fields, {
+          [field]: value,
+        })
+      }
+    }, () => this.validator())
+  }
+
+  handleOnSubmit(e) {
+    e.preventDefault();
+
+    if (this.validator()) {
+      this.props.login(this.state.fields);
+    }
+  }
+
+  validator() {
+    let fields = this.state.fields;
+    let errors = {};
+
+    if (!fields['email']) {
+      errors['email'] = 'Please enter your email.';
+    }
+
+    if (typeof fields['email'] !== "undefined") {
+      var pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!pattern.test(fields['email'])) {
+        errors['email'] = 'Please enter valid email address';
+      }
+    }
+
+    if (!fields['password']) {
+      errors['password'] = 'Please enter your password.';
+    }
+
+    this.setState({
+      errors
+    });
+
+    if (Object.keys(errors).length > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getErrorFields() {
+    if (Object.keys(this.state.errors).length > 0) {
+      return this.state.errors;
+    }
+
+    return null;
+  }
+
+  renderErrorMessages() {
+    const { isLoginFailed } = this.props;
+    try {
+      const errorMessagesObject = getErrorMessageFromApi(isLoginFailed);
+      if (!errorMessagesObject) {
+        return null;
+      }
+
+      let errorItems = errorMessagesObject.error;
+
+      return Object.keys(errorItems).map((key) => {
+        return (
+          <div className="alert alert-danger" role="alert">
+            {errorItems[key]}
+          </div>
+        )
+      })
+    } catch (error) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          Something went wrong?!
+        </div>
+      )
+    }
+  }
+
   render() {
+    const { isLoggedIn, isLoggingIn } = this.props;
+    const isInputDisabled = isLoggingIn;
+
+    if (isLoggedIn) {
+      return (
+        <CenterContent>
+          <div className="alert alert-info" role="alert">
+            <h4 className="alert-heading">Welcome back!</h4>
+            <p className="mb-0">We are redirecting you to our system. Please wait...</p>
+          </div>
+        </CenterContent>
+      )
+    }
+
     return (
       <CenterContent>
-        <div>
-          <div className="text-center mb-4">
-            <h1 className="h3 mb-3 font-weight-normal">Welcome back!</h1>
-          </div>
-          <div className="form-label-group">
-            <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
-            <label for="inputEmail">Email address</label>
-          </div>
-          <div className="form-label-group">
-            <input type="password" id="inputPassword" className="form-control" placeholder="Password" required />
-            <label for="inputPassword">Password</label>
-          </div>
-          <div className="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me" /> Remember me
-            </label>
-          </div>
-          <button className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        <div className="text-center mb-4">
+          <h1 className="h3 mb-3 font-weight-normal">Welcome back!</h1>
         </div>
+        {this.renderErrorMessages()}
+        <LoginForm
+          errorsFields={this.getErrorFields()}
+          value={this.state.fields}
+          onChange={this.handleOnChange}
+          onSubmit={this.handleOnSubmit}
+          isInputDisabled={isInputDisabled}
+          isLoading={isInputDisabled}
+        />
         <Link
           to="/user/register"
           className="btn btn-lg btn-dark btn-block mt-3"
         >
-          New member?
+          Are you a new member?
         </Link>
       </CenterContent>
     )
@@ -41,21 +178,25 @@ class LoginPage extends Component {
 }
 
 const mapStateToProps = () => createStructuredSelector({
-  user: makeSelectUserItem(),
+  currentUser: makeSelectUserItem(),
+  isLoggingIn: makeSelectIsLogingIn(),
+  isLoggedIn: makeSelectIsLoggedIn(),
+  isLoginFailed: makeSelectIsLogInFailed(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    login: (user) => dispatch(userLoginRequest(user)),
   };
 }
 
 const withConnect = connect(
-  // mapStateToProps,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
 export default compose(
+  withRouter,
   withConnect,
   memo,
 )(LoginPage);

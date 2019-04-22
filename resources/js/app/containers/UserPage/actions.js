@@ -6,8 +6,12 @@ import {
   USER_DESTROY,
   USER_LOGIN,
   USER_LOGOUT,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_LOGIN_FAILED,
 } from './constants';
 
+// Auth
 export const userAuth = () => {
   return {
     type: USER_AUTH,
@@ -33,6 +37,7 @@ export const userLoggedOut = () => {
   }
 }
 
+// Register
 export const userRegisterRequest = (user) => {
   return {
     type: USER_REGISTER_REQUEST,
@@ -50,6 +55,28 @@ export const userRegisterSuccess = (user) => {
 export const userRegisterFailed = (errorMessage) => {
   return {
     type: USER_REGISTER_FAILED,
+    payload: errorMessage,
+  }
+}
+
+// Login
+export const userLoginRequest = (user) => {
+  return {
+    type: USER_LOGIN_REQUEST,
+    payload: user,
+  }
+}
+
+export const userLoginSuccess = (user) => {
+  return {
+    type: USER_LOGIN_SUCCESS,
+    payload: user,
+  }
+}
+
+export const userLoginFailed = (errorMessage) => {
+  return {
+    type: USER_LOGIN_FAILED,
     payload: errorMessage,
   }
 }

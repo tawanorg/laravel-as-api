@@ -42,7 +42,9 @@ class AuthController extends Controller
     ]);
 
     if ($validator->fails()) {
-      return response()->json($validator->messages(), 403);
+      return response()->json([
+        'error' => $validator->messages(),
+      ]);
     }
 
     if (!$token = auth()->attempt($credentials)) {

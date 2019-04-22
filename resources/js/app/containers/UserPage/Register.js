@@ -34,7 +34,7 @@ class RegisterPage extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.isRegisterd || nextProps.user) {
+    if (nextProps.isRegisterd || nextProps.currentUser) {
       return {
         isRegisted: true,
       }
@@ -132,36 +132,41 @@ class RegisterPage extends Component {
   }
 
   renderErrorMessages() {
-    const { isRegisterFailed } = this.props;
-    const errorMessagesObject = getErrorMessageFromApi(isRegisterFailed);
-    if (!errorMessagesObject) {
-      return null;
-    }
+    const { isLoginFailed } = this.props;
+    try {
+      const errorMessagesObject = getErrorMessageFromApi(isLoginFailed);
+      if (!errorMessagesObject) {
+        return null;
+      }
 
-    let errorItems = errorMessagesObject.error;
+      let errorItems = errorMessagesObject.error;
 
-    return Object.keys(errorItems).map((key) => {
+      return Object.keys(errorItems).map((key) => {
+        return (
+          <div className="alert alert-danger" role="alert">
+            {errorItems[key]}
+          </div>
+        )
+      })
+    } catch (error) {
       return (
         <div className="alert alert-danger" role="alert">
-          {errorItems[key]}
+          Something went wrong?!
         </div>
       )
-    })
+    }
   }
 
   render() {
-    console.log('Register', this.props, this.state);
     const { isRegisterd, isRegistering, isRegisterFailed } = this.props;
     const isInputDisabled = isRegistering;
 
     if (isRegisterd) {
       return (
         <CenterContent>
-          <div>
-            <div className="text-center mb-4">
-              <h1 className="h3 mb-3 font-weight-normal">Thank you and welcome!</h1>
-              <p className="my-3">We are redirecting you to our system. Please wait...</p>
-            </div>
+          <div className="alert alert-info" role="alert">
+            <h4 className="alert-heading">Thank you and welcome!</h4>
+            <p className="mb-0">We are redirecting you to our system. Please wait...</p>
           </div>
         </CenterContent>
       )
@@ -196,7 +201,7 @@ const mapStateToProps = () => createStructuredSelector({
   isRegistering: makeSelectIsRegistering(),
   isRegisterd: makeSelectIsRegistered(),
   isRegisterFailed: makeSelectIsRegisterFailed(),
-  user: makeSelectUserItem(),
+  currentUser: makeSelectUserItem(),
 });
 
 export function mapDispatchToProps(dispatch) {

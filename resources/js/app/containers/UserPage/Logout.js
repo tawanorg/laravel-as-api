@@ -23,6 +23,8 @@ class Logout extends Component {
         isLoggedOut: true,
       }
     }
+
+    return null;
   }
 
   componentDidUpdate(prevProps, prevState) {

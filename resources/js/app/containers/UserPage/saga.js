@@ -36,7 +36,6 @@ function* userRegister({ payload }) {
     const user = yield call(userRegisterApi, userItem)
     yield put(userRegisterSuccess(user));
     localStorage.setItem('user', JSON.stringify(user));
-    console.log('userRegister', user)
   } catch (error) {
     localStorage.removeItem('user');
     yield put(userRegisterFailed(error))

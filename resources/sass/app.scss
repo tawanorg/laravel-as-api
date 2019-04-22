@@ -7,3 +7,7 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.invalid-feedback {
+  display: block !important;
+}

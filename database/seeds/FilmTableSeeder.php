@@ -18,7 +18,7 @@ class FilmTableSeeder extends Seeder
 
       foreach (range(1,3) as $index) {
         $name = $faker->name;
-        DB::table('films')->insert([
+        DB::table('film')->insert([
           'slug' => Str::slug($name, '-'),
           'name' => $name,
           'description' => $faker->text,

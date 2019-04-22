@@ -20,7 +20,7 @@ class FilmController extends Controller
      */
     public function index()
     {
-      return FilmResource::collection(Film::paginate(5));
+      return FilmResource::collection(Film::paginate(1));
     }
 
     /**

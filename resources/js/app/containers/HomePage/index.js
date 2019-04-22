@@ -2,7 +2,10 @@ import React, { Component, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectUserItem } from './selectors';
+import {
+  makeSelectUserItem,
+  makeSelectAllState,
+} from './selectors';
 
 import WelcomeBox from '../../components/WelcomeBox';
 import Film from '../../components/Film';
@@ -64,6 +67,7 @@ class HomePage extends Component {
 
 const mapStateToProps = () => createStructuredSelector({
   currentUser: makeSelectUserItem(),
+  state: makeSelectAllState(),
 });
 
 export function mapDispatchToProps(dispatch) {

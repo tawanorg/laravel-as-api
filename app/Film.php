@@ -4,19 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\CommentModel;
+use App\Comment;
 use App\User;
 
-class FilmModel extends Model
+class Film extends Model
 {
-  protected $table = 'films';
-
   protected $fillable = [
     'slug',
     'name',
     'description',
     'realeasedate',
-    'rating',
+    'ratings',
     'ticketprice',
     'country',
     'genre',
@@ -25,6 +23,6 @@ class FilmModel extends Model
 
   public function comments()
   {
-    return $this->hasMany(CommentModel::class);
+    return $this->hasMany(Comment::class);
   }
 }

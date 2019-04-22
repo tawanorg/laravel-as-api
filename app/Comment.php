@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 
-class CommentModel extends Model
+class Comment extends Model
 {
   protected $table = 'comment';
 

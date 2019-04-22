@@ -7,8 +7,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-use App\FilmModel;
-use App\CommentModel;
+use App\Film;
+use App\Comment;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -53,11 +53,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function films()
     {
-      return $this->hasMany(FilmModel::class);
+      return $this->hasMany(Film::class);
     }
 
     public function comments()
     {
-      return $this->hasMany(CommentModel::class);
+      return $this->hasMany(Comment::class);
     }
 }

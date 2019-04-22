@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\FilmModel;
+use App\Film;
 use Illuminate\Http\Request;
 use App\Http\Resources\FilmResource;
 
@@ -20,7 +20,7 @@ class FilmController extends Controller
      */
     public function index()
     {
-      return FilmResource::collection(FilmModel::with('rating')->paginate(5));
+      return FilmResource::collection(Film::paginate(5));
     }
 
     /**
@@ -31,7 +31,7 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
-      $film = FilmModel::create([
+      $film = Film::create([
         'name' => $request->title,
         'slug' => $request->slug,
         'description' => $request->description,
@@ -52,7 +52,7 @@ class FilmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FilmModel $film)
+    public function show(Film $film)
     {
       return new FilmResource($film);
     }
@@ -64,7 +64,7 @@ class FilmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FilmModel $film)
+    public function update(Request $request, Film $film)
     {
       $film->update($request->only([
         'name',
@@ -87,7 +87,7 @@ class FilmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FilmModel $film)
+    public function destroy(Film $film)
     {
       $film->delete();
       return response()->json([

@@ -4,11 +4,17 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectItem } from './selectors';
 
+import WelcomeBox from '../../components/WelcomeBox';
+
 class HomePage extends Component {
   render() {
     return (
-      <div>
-        This is HomePage!
+      <div className="container pt-3">
+        <div className="row">
+          <div className="col-12">
+            <WelcomeBox />
+          </div>
+        </div>
       </div>
     )
   }

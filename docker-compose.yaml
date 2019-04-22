@@ -54,6 +54,19 @@ services:
     networks:
       - app-network
 
+  #NPM package
+  npm:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: npm
+    volumes:
+      - "./:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    links:
+      - app
+    command: "npm run watch"
+
 #Docker Networks
 networks:
   app-network:

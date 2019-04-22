@@ -9,6 +9,8 @@ use App\User;
 
 class FilmModel extends Model
 {
+  protected $table = 'films';
+
   protected $fillable = [
     'slug',
     'name',

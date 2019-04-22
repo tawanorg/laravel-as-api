@@ -20,3 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/user/register', 'AuthController@register');
 Route::post('/user/login', 'AuthController@login');
+
+// FILM API
+Route::apiResource('film', 'FilmController');

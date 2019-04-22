@@ -10,7 +10,7 @@ const select = state => state.user || initialState;
 const makeSelectUserItem = () =>
   createSelector(
     select,
-    state => state.user,
+    state => state.currentUser,
   );
 
 const makeSelectIsRegistering = () =>

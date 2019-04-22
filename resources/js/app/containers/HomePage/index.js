@@ -2,31 +2,49 @@ import React, { Component, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectItem } from './selectors';
+import { makeSelectUserItem } from './selectors';
 
 import WelcomeBox from '../../components/WelcomeBox';
+import { userAuth } from '../UserPage/actions';
 
 class HomePage extends Component {
+  componentDidMount() {
+    this.props.checkAuth();
+  }
+
   render() {
+    console.log('HomePage', this.props);
     return (
       <div className="container pt-3">
         <div className="row">
           <div className="col-12">
-            <WelcomeBox />
+            {this.renderWelcomeBox()}
           </div>
         </div>
       </div>
     )
   }
+
+  renderWelcomeBox() {
+    const { currentUser } = this.props;
+    const name = currentUser ? currentUser.user.name : 'Guest';
+
+    return (
+      <WelcomeBox
+        isLoggedIn={currentUser !== null}
+        name={name}
+      />
+    )
+  }
 }
 
 const mapStateToProps = () => createStructuredSelector({
-  item: makeSelectItem(),
+  currentUser: makeSelectUserItem(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    checkAuth: () => dispatch(userAuth()),
   };
 }
 

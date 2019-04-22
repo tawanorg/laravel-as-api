@@ -7,9 +7,7 @@ import { makeSelectUserItem } from './selectors';
 class UserPage extends Component {
   render() {
     return (
-      <div>
-        This is UserPage!
-      </div>
+      <div />
     )
   }
 }

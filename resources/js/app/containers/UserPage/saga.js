@@ -1,10 +1,17 @@
 import axios from 'axios';
-import { all, call, put, takeLatest, delay } from 'redux-saga/effects';
+import { all, call, put, takeLatest, takeEvery, fork } from 'redux-saga/effects';
 import {
   USER_REGISTER_REQUEST,
+  USER_AUTH,
+  USER_DESTROY,
 } from './constants';
 import { USER_API_REGISTER_ENDPOINT } from '../../api';
-import { userRegisterFailed, userRegisterSuccess } from './actions';
+import {
+  userLoggedIn,
+  userRegisterFailed,
+  userRegisterSuccess,
+  userLoggedOut,
+} from './actions';
 
 function User({ email, name, password, password_confirmation }) {
   return {
@@ -42,6 +49,17 @@ function* userRegister({ payload }) {
   }
 }
 
+function* auth() {
+  let user = localStorage.getItem('user');
+  let userObj = JSON.parse(user);
+  yield put(userLoggedIn(userObj));
+}
+
+function* destroy() {
+  localStorage.removeItem('user');
+  yield put(userLoggedOut());
+}
+
 /**
  * Watchers
  */
@@ -49,8 +67,18 @@ function* watchUserRegistering() {
   yield takeLatest(USER_REGISTER_REQUEST, userRegister);
 }
 
+function* watchUserAuth() {
+  yield takeEvery(USER_AUTH, auth)
+}
+
+function* watchUserDestroy() {
+  yield takeEvery(USER_DESTROY, destroy)
+}
+
 export default function* root() {
   yield all([
     watchUserRegistering(),
+    watchUserAuth(),
+    watchUserDestroy(),
   ])
 }

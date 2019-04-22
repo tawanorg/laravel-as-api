@@ -1,3 +1,9 @@
+// Auth
+export const USER_AUTH = 'USER/AUTH';
+export const USER_DESTROY = 'USER/DESTROY';
+export const USER_LOGIN = 'USER/LOGIN';
+export const USER_LOGOUT = 'USER/LOGOUT';
+
 // Login
 export const USER_LOGIN_REQUEST = 'USER/LOGIN/REQUEST';
 export const USER_LOGIN_SUCCESS = 'USER/LOGIN/SUCCESS';

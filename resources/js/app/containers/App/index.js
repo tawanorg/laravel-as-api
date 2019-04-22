@@ -5,6 +5,7 @@ import GlobalStyles from '../../styles/global-styles';
 import UserPage from '../UserPage';
 import LoginPage from '../UserPage/Login';
 import RegisterPage from '../UserPage/Register';
+import LogOutPage from '../UserPage/Logout';
 import Header from '../../components/Header';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/films" component={HomePage} />
         <Route exact path="/user" component={UserPage} />
         <Route exact path="/user/login" component={LoginPage} />
+        <Route exact path="/user/logout" component={LogOutPage} />
         <Route exact path="/user/register" component={RegisterPage} />
         {/* <Route path="" component={NotFoundPage} /> */}
       </Switch>

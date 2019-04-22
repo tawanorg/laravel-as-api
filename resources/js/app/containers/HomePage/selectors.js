@@ -4,16 +4,11 @@ import {
 import {
   initialState
 } from './reducer';
+import { makeSelectUserItem } from '../UserPage/selectors';
 
 const select = state => state.home || initialState;
 
-const makeSelectItem = () =>
-  createSelector(
-    select,
-    state => state,
-  );
-
 export {
   select,
-  makeSelectItem,
+  makeSelectUserItem,
 };

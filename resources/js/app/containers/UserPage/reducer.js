@@ -2,13 +2,15 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAILED,
+  USER_LOGIN,
+  USER_LOGOUT,
 } from './constants';
 
 export const initialState = {
   isRegisterLoading: false,
   isRegistered: false,
   isRegisterFailed: null,
-  user: null,
+  currentUser: null,
 }
 
 export default (state = initialState, action) => {
@@ -21,14 +23,22 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {
         isRegisterLoading: false,
         isRegistered: true,
-        user: action.payload,
+        currentUser: action.payload,
       });
     case USER_REGISTER_FAILED:
       return Object.assign({}, state, {
         isRegisterLoading: false,
         isRegistered: false,
         isRegisterFailed: action.payload,
-        user: null,
+        currentUser: null,
+      });
+    case USER_LOGIN:
+      return Object.assign({}, initialState, {
+        currentUser: action.payload,
+      });
+    case USER_LOGOUT:
+      return Object.assign({}, initialState, {
+        currentUser: null,
       });
     default:
       return state;

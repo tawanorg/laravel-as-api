@@ -5,7 +5,7 @@ export const USER_API_LOGIN_ENDPOINT = `${USER_API_ENDPOINT}/login`;
 
 // Film
 export const FILM_API_ENDPOINT = '/api/film';
-// POST
+// FILM
 export const FILM_API_CREATE_ENDPOINT = `${FILM_API_ENDPOINT}`;
 // GET
 export const FILM_API_READ_ENDPOINT = `${FILM_API_ENDPOINT}`;

@@ -1,25 +1,26 @@
 import {
-  POST_LISTING_REQUEST,
-  POST_LISTING_SUCCESS,
-  POST_LISTING_FAILED,
+  FILM_LISTING_REQUEST,
+  FILM_LISTING_SUCCESS,
+  FILM_LISTING_FAILED,
 } from '../constants';
 import { initialState } from '../reducer';
 
-export default (state = initialState.delete, action) => {
+export default (state = initialState.listing, action) => {
   switch (action.type) {
-    case POST_LISTING_REQUEST:
+    case FILM_LISTING_REQUEST:
       return Object.assign({}, state, {
         isLoading: true,
       });
 
-    case POST_LISTING_SUCCESS:
+    case FILM_LISTING_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
         isFetched: true,
-        data: action.payload,
+        data: action.payload.data,
+        pagination: action.payload.pagination,
       });
 
-    case POST_LISTING_FAILED:
+    case FILM_LISTING_FAILED:
       return Object.assign({}, state, {
         isLoading: false,
         isFetched: false,

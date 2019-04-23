@@ -16,8 +16,26 @@ const state = {
   data: null,
 }
 
+const pagination = {
+  links: {
+    first: null,
+    last: null,
+    next: null,
+    prev: null,
+  },
+  meta: {
+    current_page: 0,
+    from: 0,
+    last_page: 0,
+    path: null,
+    per_page: 0,
+    to: 0,
+    total: 0,
+  }
+}
+
 export const initialState = {
-  listing: state,
+  listing: Object.assign({}, state, { pagination }),
   create: state,
   update: state,
   delete: state,

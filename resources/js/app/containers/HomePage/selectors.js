@@ -14,8 +14,29 @@ const makeSelectAllState = () =>
     state => state,
   );
 
+const makeSelectPagination = () =>
+  createSelector(
+    select,
+    state => state.listing.pagination,
+  );
+
+const makeSelectListingItems = () =>
+  createSelector(
+    select,
+    state => state.listing.data || [],
+  );
+
+const makeSelectIsListingLoading = () =>
+  createSelector(
+    select,
+    state => state.listing.isLoading,
+  );
+
 export {
   select,
   makeSelectAllState,
   makeSelectUserItem,
+  makeSelectPagination,
+  makeSelectListingItems,
+  makeSelectIsListingLoading,
 };

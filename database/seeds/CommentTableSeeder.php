@@ -11,6 +11,15 @@ class CommentTableSeeder extends Seeder
      */
     public function run()
     {
-
+      factory(App\Film::class)
+      ->create()
+      ->each(function ($film) {
+        $film
+        ->comments()
+        ->save(
+          factory(App\Comment::class)
+          ->make()
+        );
+      });
     }
 }

@@ -15,6 +15,15 @@ class FilmTableSeeder extends Seeder
      */
     public function run()
     {
-
+      factory(App\User::class)
+      ->create()
+      ->each(function ($user) {
+        $user
+        ->films()
+        ->save(
+          factory(App\Film::class)
+          ->make()
+        );
+      });
     }
 }

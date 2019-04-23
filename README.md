@@ -8,3 +8,16 @@
 - docker-compose exec app php artisan db:seed
 - Open url ```http://localhost/#/films```
 
+## What I've done.
+
+- React as frontend framework
+  - react-redux
+  - redux
+  - redux-saga
+  - reselect
+  - styled-components
+  - Bootstrap SCSS/CSS
+- Laravel as API as service 
+  - API Resources
+  - API Controller
+  - Auth JWT

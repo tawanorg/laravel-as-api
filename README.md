@@ -9,7 +9,6 @@
 - Open url ```http://localhost/#/films```
 
 ## What I've done.
-
 - React as frontend framework
   - react-redux
   - redux
@@ -26,4 +25,7 @@
 - User Authentication, Register, Login, Logout
 - Listing films
 - Listing pagination.
-- User could make comment.
+
+## TODO
+- User could make a comment
+- User could add/update/delete film

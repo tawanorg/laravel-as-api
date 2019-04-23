@@ -1,29 +1,67 @@
-import React from 'react';
+import React, { Component, memo } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import HomePage from '../HomePage';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import {
+  makeSelectUserItem,
+} from '../UserPage/selectors';
 import GlobalStyles from '../../styles/global-styles';
-import LoginPage from '../UserPage/Login';
-import RegisterPage from '../UserPage/Register';
-import FilmDetailPage from '../FilmDetailPage';
-import LogOutPage from '../UserPage/Logout';
 import Header from '../../components/Header';
 
-function App() {
-  return (
-    <React.Fragment>
-      <GlobalStyles />
-      <Header />
-      <Switch>
-        <Redirect exact from='/' to='/films'/>
-        <Route exact path="/films" component={HomePage} />
-        <Route exact path="/film/:slug" component={FilmDetailPage} />
-        <Route exact path="/user/login" component={LoginPage} />
-        <Route exact path="/user/logout" component={LogOutPage} />
-        <Route exact path="/user/register" component={RegisterPage} />
-        {/* <Route path="" component={NotFoundPage} /> */}
-      </Switch>
-    </React.Fragment>
-  )
+import { userAuth } from '../UserPage/actions';
+import LoginPage from '../UserPage/Login';
+import RegisterPage from '../UserPage/Register';
+import LogOutPage from '../UserPage/Logout';
+
+import HomePage from '../HomePage';
+import FilmDetailPage from '../FilmDetailPage';
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.checkAuth();
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <GlobalStyles />
+        <Header />
+        <Switch>
+          <Redirect exact from='/' to='/films'/>
+          <Route exact path="/films" component={HomePage} />
+          <Route exact path="/film/:slug" component={FilmDetailPage} />
+          <Route exact path="/user/login" component={LoginPage} />
+          <Route exact path="/user/logout" component={LogOutPage} />
+          <Route exact path="/user/register" component={RegisterPage} />
+          {/* <Route path="" component={NotFoundPage} /> */}
+        </Switch>
+      </React.Fragment>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = () => createStructuredSelector({
+  currentUser: makeSelectUserItem(),
+});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    checkAuth: () => dispatch(userAuth()),
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(App);
+

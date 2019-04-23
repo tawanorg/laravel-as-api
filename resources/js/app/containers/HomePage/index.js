@@ -18,7 +18,6 @@ import Film from '../../components/Film';
 import UserCommentBox from '../../components/UserCommentBox';
 import CommentBox from '../../components/CommentBox';
 import Pagination from '../../components/Pagination';
-import { userAuth } from '../UserPage/actions';
 import * as listingActions from './actions/listing';
 
 class HomePage extends Component {
@@ -33,7 +32,6 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    this.props.checkAuth();
     this.props.listing();
   }
 
@@ -56,7 +54,6 @@ class HomePage extends Component {
   }
 
   renderListingView() {
-    console.log('HomePage', this.props);
     const { isListinFetching, isListingLoading, listingItems, currentUser } = this.props;
     if (isListingLoading) {
       return (
@@ -182,7 +179,6 @@ const mapStateToProps = () => createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    checkAuth: () => dispatch(userAuth()),
     listing: (page) => dispatch(listingActions.request(page)),
   };
 }

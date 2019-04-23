@@ -23,3 +23,5 @@ Route::post('/user/login', 'AuthController@login');
 
 // FILM API
 Route::apiResource('film', 'FilmController');
+Route::get('/film/{slug}', 'FilmController@show');
+

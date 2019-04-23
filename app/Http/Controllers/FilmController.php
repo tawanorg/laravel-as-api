@@ -49,11 +49,12 @@ class FilmController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show(Film $film)
+    public function show($slug)
     {
+      $film = Film::where('slug', $slug)->first();
       return new FilmResource($film);
     }
 

@@ -100,11 +100,11 @@ function* destroy() {
  * Watchers
  */
 function* watchUserLoggingin() {
-  yield takeLatest(USER_LOGIN_REQUEST, userLogin);
+  yield takeEvery(USER_LOGIN_REQUEST, userLogin);
 }
 
 function* watchUserRegistering() {
-  yield takeLatest(USER_REGISTER_REQUEST, userRegister);
+  yield takeEvery(USER_REGISTER_REQUEST, userRegister);
 }
 
 function* watchUserAuth() {

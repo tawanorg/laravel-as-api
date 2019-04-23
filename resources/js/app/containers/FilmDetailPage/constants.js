@@ -1,0 +1,4 @@
+
+export const REQUEST = 'FILM_DETAIL/REQUEST';
+export const SUCCESS = 'FILM_DETAIL/SUCCESS';
+export const FAILED = 'FILM_DETAIL/FAILED';

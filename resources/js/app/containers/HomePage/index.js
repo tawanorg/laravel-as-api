@@ -9,6 +9,7 @@ import {
   makeSelectPagination,
   makeSelectListingItems,
   makeSelectIsListingLoading,
+  makeSelectIsListingFetching,
 } from './selectors';
 
 import WelcomeBox from '../../components/WelcomeBox';
@@ -56,14 +57,22 @@ class HomePage extends Component {
 
   renderListingView() {
     console.log('HomePage', this.props);
-    const { isListingLoading, listingItems, currentUser } = this.props;
+    const { isListinFetching, isListingLoading, listingItems, currentUser } = this.props;
+    if (isListingLoading) {
+      return (
+        <Loading />
+      )
+    }
 
     return (
       <React.Fragment>
         {this.renderPagination()}
+        {isListinFetching && (<Loading />)}
         {
-          isListingLoading ? (
-            <Loading />
+          listingItems.length <= 0 ? (
+            <div className="alert alert-info" role="alert">
+              No film found!.
+            </div>
           ) : listingItems.map(({
             country,
             description,
@@ -168,6 +177,7 @@ const mapStateToProps = () => createStructuredSelector({
   pagination: makeSelectPagination(),
   listingItems: makeSelectListingItems(),
   isListingLoading: makeSelectIsListingLoading(),
+  isListinFetching: makeSelectIsListingFetching(),
 });
 
 export function mapDispatchToProps(dispatch) {

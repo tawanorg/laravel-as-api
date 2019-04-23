@@ -29,6 +29,12 @@ const makeSelectListingItems = () =>
 const makeSelectIsListingLoading = () =>
   createSelector(
     select,
+    state => state.listing.isLoading && !state.listing.isFetched,
+  );
+
+const makeSelectIsListingFetching = () =>
+  createSelector(
+    select,
     state => state.listing.isLoading,
   );
 
@@ -39,4 +45,5 @@ export {
   makeSelectPagination,
   makeSelectListingItems,
   makeSelectIsListingLoading,
+  makeSelectIsListingFetching,
 };

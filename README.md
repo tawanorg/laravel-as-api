@@ -21,3 +21,9 @@
   - API Resources
   - API Controller
   - Auth JWT
+
+## Features
+- User Authentication, Register, Login, Logout
+- Listing films
+- Listing pagination.
+- User could make comment.
